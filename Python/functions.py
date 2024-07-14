@@ -1,5 +1,6 @@
 import requests
 import json
+import csv
 
 def get_devops_projects(devops_org_name, headers):
     url = f"https://dev.azure.com/{devops_org_name}/_apis/projects?api-version=7.2-preview.4"
@@ -23,4 +24,32 @@ def get_devops_task(url, headers):
     response = requests.get(url, headers=headers)
     return response.json()
 
+def write_to_csv(work_items, output_file_name, headers): 
+    with open(output_file_name, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        # Write the header row
+        writer.writerow(['Id', 'Title', 'AreaPath', 'TeamProject', 'IterationPath', 'WorkItemType', 'State', 'Reason', 'AssignedTo','Parent'])
 
+        # Process each work item
+        for work_item in work_items:
+            work_item_url = work_item['url']
+            url = work_item_url + "?$expand=all"
+            work_item = requests.get(url, headers=headers).json()
+            
+            work_item_dict = {
+                'Id': work_item['id'],
+                'Title': work_item['fields']['System.Title'],
+                'AreaPath': work_item['fields']['System.AreaPath'],
+                'TeamProject': work_item['fields']['System.TeamProject'],
+                'IterationPath': work_item['fields']['System.IterationPath'],
+                'WorkItemType': work_item['fields']['System.WorkItemType'],
+                'State': work_item['fields']['System.State'],
+                'Reason': work_item['fields']['System.Reason'],
+                'AssignedTo': work_item['fields'].get('System.AssignedTo'),
+                'Parent': work_item['fields'].get('System.Parent')
+                # Add more fields as needed
+            }
+            
+
+            # Write the work item data to the CSV file
+            writer.writerow(work_item_dict.values())
