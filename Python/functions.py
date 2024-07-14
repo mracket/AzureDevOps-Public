@@ -35,7 +35,6 @@ def write_to_csv(work_items, output_file_name, headers):
             work_item_url = work_item['url']
             url = work_item_url + "?$expand=all"
             work_item = requests.get(url, headers=headers).json()
-            print(work_item)
             work_item_dict = {                
                 'Id': work_item['id'],
                 'Title': work_item['fields']['System.Title'],
@@ -58,3 +57,5 @@ def write_to_csv(work_items, output_file_name, headers):
 
             # Write the work item data to the CSV file
             writer.writerow(work_item_dict.values())
+            
+            

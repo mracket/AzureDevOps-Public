@@ -1,8 +1,5 @@
-import requests
 import base64
-import json
 import functions as f
-import csv
 import argparse
 
 # Parameters
