@@ -29,7 +29,7 @@ work_items = f.get_devops_project_team_tasks(args.devops_org_name, projects[0]['
 with open(args.output_file_name, 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         # Write the header row
-        writer.writerow(['Id', 'Title', 'AreaPath', 'TeamProject', 'IterationPath', 'WorkItemType', 'State', 'Reason', 'AssignedTo'])
+        writer.writerow(['Id', 'Title', 'AreaPath', 'TeamProject', 'IterationPath', 'WorkItemType', 'State', 'Reason', 'AssignedTo','Parent'])
 
         # Process each work item
         for work_item in work_items:
@@ -46,7 +46,8 @@ with open(args.output_file_name, 'w', newline='') as csvfile:
                 'WorkItemType': work_item['fields']['System.WorkItemType'],
                 'State': work_item['fields']['System.State'],
                 'Reason': work_item['fields']['System.Reason'],
-                'AssignedTo': work_item['fields'].get('System.AssignedTo')
+                'AssignedTo': work_item['fields'].get('System.AssignedTo'),
+                'Parent': work_item['fields'].get('System.Parent')
                 # Add more fields as needed
             }
             
