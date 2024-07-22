@@ -26,7 +26,7 @@ def get_devops_task(url, headers):
 
 def write_to_csv(work_items, output_file_name, headers): 
     with open(output_file_name, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
+        writer = csv.writer(csvfile, delimiter=';'))
         # Write the header row
         writer.writerow(['Id', 'Title', 'AreaPath', 'TeamProject', 'IterationPath', 'WorkItemType', 'State', 'Reason', 'AssignedTo','Parent','CreatedDate','CreatedBy','ChangedDate','ChangedBy','CommentCount','boardColumn','boardColumnDone','description'])
 
@@ -50,7 +50,9 @@ def write_to_csv(work_items, output_file_name, headers):
                 'CreatedBy': work_item['fields']['System.CreatedBy'],
                 'ChangedDate': work_item['fields']['System.ChangedDate'],
                 'ChangedBy': work_item['fields']['System.ChangedBy'],
-                'CommentCount': work_item['fields']['System.CommentCount'],
+                'CommentCount': work_item['fields']['System.CommentCount'],                
+                'boardColumn': work_item['fields'].get('System.BoardColumn'),
+                'boardColumnDone': work_item['fields'].get('System.BoardColumnDone'),
                 'description': work_item['fields'].get('System.Description')              
                 # Add more fields as needed
             }           
